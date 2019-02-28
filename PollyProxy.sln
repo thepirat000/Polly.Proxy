@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polly.Proxy", "PollyProxy\Polly.Proxy.csproj", "{CFADEE94-9C1D-4491-AF4E-0622F88BBCCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polly.Proxy.Test", "PollyProxy.Test\Polly.Proxy.Test.csproj", "{0A3275B5-0B23-4640-9428-8C384D36A656}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFADEE94-9C1D-4491-AF4E-0622F88BBCCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFADEE94-9C1D-4491-AF4E-0622F88BBCCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFADEE94-9C1D-4491-AF4E-0622F88BBCCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFADEE94-9C1D-4491-AF4E-0622F88BBCCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A3275B5-0B23-4640-9428-8C384D36A656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A3275B5-0B23-4640-9428-8C384D36A656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A3275B5-0B23-4640-9428-8C384D36A656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A3275B5-0B23-4640-9428-8C384D36A656}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D87DCB82-A07E-42FA-8855-714918EE8428}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Configure Polly by using a Dynamic Proxy.</Description>
+    <Copyright>Copyright 2019</Copyright>
+    <AssemblyTitle>Polly.Proxy</AssemblyTitle>
+    <AssemblyName>Polly.Proxy</AssemblyName>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <Authors>Federico Colombo</Authors>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>Polly.Proxy</PackageId>
+    <PackageTags>Polly;Proxy</PackageTags>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageProjectUrl>https://github.com/thepirat000/Polly.Proxy</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="4.3.1" />
+    <PackageReference Include="Castle.Core.AsyncInterceptor" Version="1.6.0" />
+    <PackageReference Include="Polly" Version="7.0.3" />
+  </ItemGroup>
+
+</Project>
