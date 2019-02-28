@@ -2,60 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Polly.Proxy.Test
 {
-    public class YourAttribute : Attribute
-    {
-
-    }
-public interface IYourInterface
-{
-    void YourMethod();
-    Task YourMethodAsync();
-}
-
-    public class YourClass : IYourInterface
-    {
-        public void YourMethod()
-        {
-            throw new Exception();
-        }
-        public async Task YourMethodAsync()
-        {
-            throw new Exception();
-
-        }
-    }
-    public class AnotherClass
-    {
-        private IYourInterface _instance = // <-- Will proxy this instance
-            PollyProxy.Create<IYourInterface>(new YourClass(), p => p
-                .Default(Policy.Handle<Exception>().Retry(2)));
-
-        public async Task SomeMethod()
-        {
-            _instance.YourMethod(); // <-- This call will be handled by Polly
-                                    // ...
-        }
-    }
-
     public class ProxyTests
     {
         [SetUp]
         public void Setup()
         {
-            
-
-var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
-    .For("YourMethod1", Policy.Handle<TimeoutException>().Retry(2))
-    .For("YourMethodAsync", Policy.Handle<Exception>().RetryForeverAsync())
-    .When(mi => mi.GetCustomAttribute<YourAttribute>() != null, Policy.Timeout(10))
-    .Default(Policy.NoOp()));
-
-            
         }
 
         [Test]
@@ -64,7 +21,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().Retry(1);
             var proxy = PollyProxy.Create<IClientTest>(new ClientTest(), config => config
                 .For("NotVirtualFailFirst", pol => pol.Use(policy)));
-            var ret = proxy.NotVirtualFailFirst("y"); // first fails
+            var ret = proxy.NotVirtualFailFirst("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -74,7 +31,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().RetryAsync(1);
             var proxy = PollyProxy.Create<IClientTest>(new ClientTest(), config => config
                 .When(mi => mi.Name == "NotVirtualFailFirstAsync", policy));
-            var ret = await proxy.NotVirtualFailFirstAsync("y"); // first fails
+            var ret = await proxy.NotVirtualFailFirstAsync("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -84,7 +41,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().Retry(1);
             var proxy = PollyProxy.Create<IClientTest>(new ClientTest(), config => config
                 .For("NotVirtualFailFirstAsync", policy));
-            var ret = await proxy.NotVirtualFailFirstAsync("y"); // first fails
+            var ret = await proxy.NotVirtualFailFirstAsync("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -94,7 +51,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().RetryAsync(1);
             var proxy = PollyProxy.Create<IClientTest>(new ClientTest(), config => config
                 .For("NotVirtualFailFirst", pol => pol.Use(policy)));
-            var ret = proxy.NotVirtualFailFirst("y"); // first fails
+            var ret = proxy.NotVirtualFailFirst("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -105,7 +62,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var cli = new ClientTest();
             var proxy = PollyProxy.Create<IClientTest>(cli, config => config
                 .For("NotVirtualFailFirstVoidAsync", policy));
-            await proxy.NotVirtualFailFirstVoidAsync("y"); // first fails
+            await proxy.NotVirtualFailFirstVoidAsync("y"); 
             Assert.IsFalse(cli._fail);
         }
 
@@ -116,7 +73,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var cli = new ClientTest();
             var proxy = PollyProxy.Create<IClientTest>(cli, config => config
                 .For("NotVirtualFailFirstVoidAsync", policy));
-            await proxy.NotVirtualFailFirstVoidAsync("y"); // first fails
+            await proxy.NotVirtualFailFirstVoidAsync("y"); 
             Assert.IsFalse(cli._fail);
         }
 
@@ -128,7 +85,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().Retry(1);
             var proxy = PollyProxy.Create<ClientTest>(config => config
                 .For("FailFirst", policy));
-            var ret = proxy.FailFirst("y"); // first fails
+            var ret = proxy.FailFirst("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -138,7 +95,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().RetryAsync(1);
             var proxy = PollyProxy.Create<ClientTest>(config => config
                 .When(mi => mi.Name == "FailFirstAsync", _ => _.Use(policy)));
-            var ret = await proxy.FailFirstAsync("y"); // first fails
+            var ret = await proxy.FailFirstAsync("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -148,7 +105,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().Retry(1);
             var proxy = PollyProxy.Create<ClientTest>(config => config
                 .For("FailFirstAsync", policy));
-            var ret = await proxy.FailFirstAsync("y"); // first fails
+            var ret = await proxy.FailFirstAsync("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -158,7 +115,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var policy = Policy.Handle<ArgumentException>().RetryAsync(1);
             var proxy = PollyProxy.Create<ClientTest>(config => config
                 .For("FailFirst", pol => pol.Use(policy)));
-            var ret = proxy.FailFirst("y"); // first fails
+            var ret = proxy.FailFirst("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -169,7 +126,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var cli = new ClientTest();
             var proxy = PollyProxy.Create<ClientTest>(cli, config => config
                 .When(mi => mi.Name == "FailFirstVoidAsync", policy));
-            await proxy.FailFirstVoidAsync("y"); // first fails
+            await proxy.FailFirstVoidAsync("y"); 
             Assert.AreEqual(false, cli._fail);
         }
         [Test]
@@ -179,7 +136,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var cli = new ClientTest();
             var proxy = PollyProxy.Create<ClientTest>(cli, config => config
                 .When(mi => mi.Name == "FailFirstVoidAsync", policy));
-            await proxy.FailFirstVoidAsync("y"); // first fails
+            await proxy.FailFirstVoidAsync("y"); 
             Assert.AreEqual(false, cli._fail);
         }
 
@@ -192,7 +149,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var proxy = PollyProxy.Create<IClientTest>(new ClientTest(), config => config
                 .For("XXXX", policyNA)
                 .Default(policy));
-            var ret = proxy.NotVirtualFailFirst("y"); // first fails
+            var ret = proxy.NotVirtualFailFirst("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -204,7 +161,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var proxy = PollyProxy.Create<IClientTest>(new ClientTest(), config => config
                 .For("XXXX", policyNA)
                 .Default(policy));
-            var ret = await proxy.NotVirtualFailFirstAsync("y"); // first fails
+            var ret = await proxy.NotVirtualFailFirstAsync("y"); 
             Assert.AreEqual("y", ret);
         }
 
@@ -217,7 +174,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var proxy = PollyProxy.Create<IClientTest>(cli, config => config
                 .For("XXXX", policyNA)
                 .Default(policy));
-            await proxy.NotVirtualFailFirstVoidAsync("y"); // first fails
+            await proxy.NotVirtualFailFirstVoidAsync("y"); 
             Assert.AreEqual(false, cli._fail);
         }
 
@@ -229,7 +186,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
                 .For("XXXX", policyNA));
             Assert.Throws<ArgumentException>(() =>
             {
-                var ret = proxy.NotVirtualFailFirst("y"); // first fails
+                var ret = proxy.NotVirtualFailFirst("y"); 
             });
         }
 
@@ -241,7 +198,7 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
                 .For("XXXX", policyNA));
             Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                var ret = await proxy.NotVirtualFailFirstAsync("y"); // first fails
+                var ret = await proxy.NotVirtualFailFirstAsync("y"); 
             });
             await Task.CompletedTask;
         }
@@ -254,13 +211,13 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
                 .For("XXXX", policyNA));
             Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await proxy.NotVirtualFailFirstVoidAsync("y"); // first fails
+                await proxy.NotVirtualFailFirstVoidAsync("y"); 
             });
             await Task.CompletedTask;
         }
 
         [Test]
-        public async Task TestProxy_Map()
+        public async Task TestProxy_MapRule()
         {
             var policy = Policy.Handle<ArgumentException>().RetryAsync(1);
             var policyNA = Policy.Handle<NullReferenceException>().RetryAsync(2);
@@ -268,12 +225,12 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
             var proxy = PollyProxy.Create<IClientTest>(cli, config => config
                 .Map(mi => mi.Name == "NotVirtualFailFirstAsync" ? policy : null)
                 .Default(policyNA));
-            var ret = await proxy.NotVirtualFailFirstAsync("y"); // first fails
+            var ret = await proxy.NotVirtualFailFirstAsync("y"); 
             Assert.IsFalse(cli._fail);
             cli._fail = true;
             Assert.Throws<ArgumentException>(() =>
             {
-                var ret2 = proxy.NotVirtualFailFirst("z"); // first fails but should not retry because of handling wrong exception
+                var ret2 = proxy.NotVirtualFailFirst("z");  // should not retry because of handling wrong exception
             });
             Assert.AreEqual("y", ret);
         }
@@ -290,8 +247,36 @@ var proxy = PollyProxy.Create<IYourInterface>(new YourClass(), _ => _
                 .Default(null));
             Assert.Throws<ArgumentException>(() =>
             {
-                var ret2 = proxy.NotVirtualFailFirst("z"); // first fails but should not retry because no matching policy
+                var ret2 = proxy.NotVirtualFailFirst("z");  // should not retry because no matching policy
             });
+        }
+
+        [Test]
+        public void TestProxy_CustomAttributeRule()
+        {
+            var policy = Policy.Handle<ArgumentException>().Retry(2);
+            var proxy = PollyProxy.Create<IClientTest>(new ClientTest(), config => config
+                .When(mi => mi.GetCustomAttribute<MarkAttribute>(true) != null, policy));
+            var ret = proxy.FailFirst("y"); 
+            Assert.AreEqual("y", ret);
+        }
+
+        [Test]
+        public async Task TestProxy_AsyncBy_AsyncStateMachineAttribute()
+        {
+            var policy = Policy.Handle<ArgumentException>().RetryAsync(1);
+            var cli = new ClientTest();
+            var proxy = PollyProxy.Create(cli, config => config
+                .When(mi => mi.GetCustomAttribute<AsyncStateMachineAttribute>() != null, policy));
+            var ret = await proxy.FailFirstAsync("y"); 
+            cli._fail = true;
+            await proxy.FailFirstVoidAsync("y"); 
+            cli._fail = true;
+            Assert.Throws<ArgumentException>(() =>
+            {
+                proxy.FailFirst("y");
+            });
+            Assert.AreEqual("y", ret);
         }
 
     }

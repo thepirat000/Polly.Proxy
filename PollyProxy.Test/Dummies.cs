@@ -25,9 +25,14 @@ namespace Polly.Proxy.Test
         }
     }
 
-
+    [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
+    public sealed class MarkAttribute : Attribute
+    {
+    }
+    
     public interface IClientTest
     {
+        [Mark]
         string FailFirst(string id);
         Task<string> FailFirstAsync(string id);
         Task FailFirstVoidAsync(string id);
