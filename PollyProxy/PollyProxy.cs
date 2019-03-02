@@ -15,7 +15,6 @@ namespace Polly.Proxy
         /// <summary>
         /// Creates a proxy of a given class/interface instance so the virtual calls can be intercepted and made using a Polly policy.
         /// </summary>
-        /// <typeparam name="T">The instance type</typeparam>
         /// <param name="instance">The instance to proxy</param>
         /// <param name="config">The configuration for this instance.</param>
         /// <returns>The proxied instance of T</returns>
@@ -37,7 +36,6 @@ namespace Polly.Proxy
         /// <summary>
         /// Creates a proxy of a given class/interface so its virtual calls can be intercepted and made using a Polly policy.
         /// </summary>
-        /// <typeparam name="T">The instance type</typeparam>
         /// <param name="config">The configuration for this instance.</param>
         /// <returns>The proxied new instance of T</returns>
         public static T Create(Action<IProxyConfig<T>> config)
