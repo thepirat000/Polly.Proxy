@@ -7,7 +7,8 @@ namespace Polly.Proxy
     /// <summary>
     /// Helper to create a Dynamic Proxies on interfaces methods or virtual methods 
     /// </summary>
-    public class PollyProxy
+    public class PollyProxy<T>
+        where T : class
     {
         private static readonly ProxyGenerator Generator = new ProxyGenerator();
 
@@ -18,12 +19,11 @@ namespace Polly.Proxy
         /// <param name="instance">The instance to proxy</param>
         /// <param name="config">The configuration for this instance.</param>
         /// <returns>The proxied instance of T</returns>
-        public static T Create<T>(T instance, Action<IProxyConfig> config)
-            where T : class
+        public static T Create(T instance, Action<IProxyConfig<T>> config)
         {
-            var cfg = new ProxyConfig();
+            var cfg = new ProxyConfig<T>();
             config.Invoke(cfg);
-            var interceptor = new PollyProxyInterceptorAsync(cfg);
+            var interceptor = new PollyProxyInterceptorAsync<T>(cfg);
             if (typeof(T).GetTypeInfo().IsInterface)
             {
                 return Generator.CreateInterfaceProxyWithTarget<T>(instance, new[] { interceptor });
@@ -38,12 +38,12 @@ namespace Polly.Proxy
         /// Creates a proxy of a given class/interface so its virtual calls can be intercepted and made using a Polly policy.
         /// </summary>
         /// <typeparam name="T">The instance type</typeparam>
-        /// <param name="policyBuilder">A function to map virtual methods of T with Polly policies to use. Can return NULL to bypass Polly.</param>
+        /// <param name="config">The configuration for this instance.</param>
         /// <returns>The proxied new instance of T</returns>
-        public static T Create<T>(Action<IProxyConfig> config)
-            where T : class, new()
+        public static T Create(Action<IProxyConfig<T>> config)
         {
-            return Create<T>(new T(), config);
+            var instance = (T)Activator.CreateInstance(typeof(T));
+            return Create(instance, config);
         }
     }
 }

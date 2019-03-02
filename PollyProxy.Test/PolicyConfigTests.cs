@@ -17,7 +17,7 @@ namespace Polly.Proxy.Test
             var policy2 = Policy.Handle<Exception>().Retry(4);
             var policy3 = Policy.Handle<Exception>().Retry(6);
 
-            var cfg = new ProxyConfig();
+            var cfg = new ProxyConfig<object>();
             cfg.Default(policy3);
             cfg.For("GetInfo1", policy1);
             cfg.When(mi => mi.Name == "GetInfo2", policy2);
@@ -37,7 +37,7 @@ namespace Polly.Proxy.Test
             var policy1 = Policy.Handle<Exception>().Retry(2);
             var policy2 = Policy.Handle<Exception>().Retry(4);
 
-            var cfg = new ProxyConfig();
+            var cfg = new ProxyConfig<object>();
             cfg.For("GetInfo1", policy1);
             cfg.When(mi => mi.Name == "GetInfo2", policy2);
             cfg.Map(mi => mi.Name == "GetInfo3" ? policy1 : null);

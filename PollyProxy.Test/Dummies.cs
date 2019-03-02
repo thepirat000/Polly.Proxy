@@ -37,6 +37,7 @@ namespace Polly.Proxy.Test
         Task<string> FailFirstAsync(string id);
         Task FailFirstVoidAsync(string id);
 
+        void FailFirstVoid(string id);
         object NotVirtualFailFirst(string id);
         Task<object> NotVirtualFailFirstAsync(string id);
         Task NotVirtualFailFirstVoidAsync(string id);
@@ -44,6 +45,15 @@ namespace Polly.Proxy.Test
     public class ClientTest : IClientTest
     {
         internal bool _fail = true;
+
+        public virtual void FailFirstVoid(string id)
+        {
+            if (_fail)
+            {
+                _fail = false;
+                throw new ArgumentException("this is a test exception");
+            }
+        }
 
         public virtual string FailFirst(string id)
         {

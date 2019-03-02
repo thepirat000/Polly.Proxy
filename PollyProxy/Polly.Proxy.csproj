@@ -4,7 +4,7 @@
     <Copyright>Copyright 2019</Copyright>
     <AssemblyTitle>Polly.Proxy</AssemblyTitle>
     <AssemblyName>Polly.Proxy</AssemblyName>
-    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionPrefix>0.0.2</VersionPrefix>
     <Authors>Federico Colombo</Authors>
     <TargetFrameworks>netstandard1.4;netstandard2.0;net45</TargetFrameworks>
     <NoWarn>$(NoWarn);1591</NoWarn>

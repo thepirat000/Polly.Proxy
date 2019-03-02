@@ -7,11 +7,12 @@ namespace Polly.Proxy
     /// <summary>
     /// Castle core interceptor using Castle.Core.AsyncInterceptor extension
     /// </summary>
-    internal class PollyProxyInterceptorAsync : IAsyncInterceptor
+    internal class PollyProxyInterceptorAsync<T> : IAsyncInterceptor
+        where T : class
     {
-        private ProxyConfig _config;
+        private ProxyConfig<T> _config;
 
-        public PollyProxyInterceptorAsync(ProxyConfig config)
+        public PollyProxyInterceptorAsync(ProxyConfig<T> config)
         {
             _config = config;
         }

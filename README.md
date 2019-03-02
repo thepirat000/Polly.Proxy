@@ -18,11 +18,11 @@ PM> Install-Package Polly.Proxy
 
 ## Usage
 
-Create a new proxy for a class (or interface) by using `PollyProxy.Create<T>()` helper method:
+Create a new proxy for a class (or interface) by using `PollyProxy<T>.Create()` helper method:
 
 ```c#
-var proxy = PollyProxy.Create<Interface>(new Class(), policies => policies
-    .For("MyMethod", Policy.Handle<Exception>().Retry(3))
+var proxy = PollyProxy<IInterface>.Create(new Class(), policies => policies
+    .For(_ => _.Method(), Policy.Handle<Exception>().Retry(3))
     .Default(Policy.NoOp()));
 ```
 
@@ -31,14 +31,14 @@ var proxy = PollyProxy.Create<Interface>(new Class(), policies => policies
 Given an existing interface/class pair:
 
 ```c#
-public interface IYourInterface
+public interface IInterface
 {
-    void YourMethod();
+    void Method();
 }
 
-public class YourClass : IYourInterface
+public class Class : IInterface
 {
-    public void YourMethod()
+    public void Method()
     {
         // ...
     }
@@ -50,11 +50,11 @@ That is used in some other place:
 ```c#
 public class AnotherClass
 {
-    private IYourInterface _instance = new YourClass();
+    private IInterface _instance = new Class();
 
     public void Run()
     {
-        _instance.YourMethod();
+        _instance.Method();
         // ...
     }
 }
@@ -68,17 +68,17 @@ using Polly;
 
 public class AnotherClass
 {
-    private IYourInterface _instance; // <-- Will proxy this instance
+    private IInterface _instance; // <-- Will proxy this instance
 
     public AnotherClass()
     {
-        _instance = PollyProxy.Create<IYourInterface>(new YourClass(), p => p
+        _instance = PollyProxy<IInterface>.Create(new Class(), p => p
             .Default(Policy.Handle<Exception>().Retry(2)));
     }
 
     public void Run()
     {
-        _instance.YourMethod(); // <-- This call will be handled by Polly
+        _instance.Method(); // <-- This call will be handled by Polly
         // ...
     }
 }
@@ -89,6 +89,7 @@ public class AnotherClass
 You can use the fluent API to map the policies _rules_:
 
 - `.For(string methodName, Policy policy)`: Maps a policy for a method by its case-sentitive name.
+- `.For(Expression methodExpression, Policy policy)`: Maps a policy for a method by an expression.
 - `.When(Func<MethodInfo, bool> selector, Policy policy)`: Specifies a policy to be used under certain condition on the [`MethodInfo`](https://docs.microsoft.com/en-us/dotnet/api/system.reflection.methodinfo) being called.
 - `.Map(Func<MethodInfo, Policy> policyBuilder)`: A function of the `MethodInfo` being called that returns the policy to use (or NULL).
 - `.Default(Policy policy)`: Defines a default Policy to use for any other method not mapped by other rules.
@@ -99,7 +100,7 @@ You can use the fluent API to map the policies _rules_:
 
 ## Creating proxies
 
-The `PollyProxy.Create<T>()` method returns a proxy object that _inherits from the proxied class_ / _implements proxied interface_ and forwards calls to the real object.
+The `PollyProxy<T>.Create()` method returns a proxy object that _inherits from the proxied class_ / _implements proxied interface_ T and forwards calls to the real object.
 
 Give special attention to the generic type argument `T`, it can be:
 - **An interface**: Will generate an _interface proxy_ to log all the interface member calls. (Recommended)
