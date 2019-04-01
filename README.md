@@ -21,8 +21,8 @@ PM> Install-Package Polly.Proxy
 Create a new proxy for a class (or interface) by using `PollyProxy<T>.Create()` helper method:
 
 ```c#
-var proxy = PollyProxy<IInterface>.Create(new Class(), policies => policies
-    .For(_ => _.Method(), Policy.Handle<Exception>().Retry(3))
+var proxy = PollyProxy<ISvcClient>.Create(new SvcClient(), policies => policies
+    .For(_ => _.GetSomeData(), Policy.Handle<Exception>().Retry(3))
     .Default(Policy.NoOp()));
 ```
 
@@ -31,14 +31,14 @@ var proxy = PollyProxy<IInterface>.Create(new Class(), policies => policies
 Given an existing interface/class pair:
 
 ```c#
-public interface IInterface
+public interface ISvcClient
 {
-    void Method();
+    Data[] GetSomeData();
 }
 
-public class Class : IInterface
+public class SvcClient : ISvcClient
 {
-    public void Method()
+    public Data[] GetSomeData()
     {
         // ...
     }
@@ -50,11 +50,12 @@ That is used in some other place:
 ```c#
 public class AnotherClass
 {
-    private IInterface _instance = new Class();
+    private ISvcClient _svcClient = new SvcClient();
 
     public void Run()
     {
-        _instance.Method();
+        var data = _svcClient.GetSomeData();
+        Process(data);
         // ...
     }
 }
@@ -68,17 +69,17 @@ using Polly;
 
 public class AnotherClass
 {
-    private IInterface _instance; // <-- Will proxy this instance
+    private ISvcClient _svcClient; // <-- Will proxy this instance
 
     public AnotherClass()
     {
-        _instance = PollyProxy<IInterface>.Create(new Class(), p => p
+        _svcClient = PollyProxy<ISvcClient>.Create(new SvcClient(), p => p
             .Default(Policy.Handle<Exception>().Retry(2)));
     }
 
     public void Run()
     {
-        _instance.Method(); // <-- This call will be handled by Polly
+        var data = _svcClient.GetSomeData(); // <-- This call will be handled by Polly
         // ...
     }
 }
